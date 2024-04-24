@@ -1,0 +1,46 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "$ref": "parameters.json"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-02-01",
+            "name": "[parameters('appName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "serverFarmId": "[variables('appServicePlanId')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "GITHUB_REPO_URL",
+                            "value": "[parameters('githubRepoUrl')]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[variables('appServicePlanId')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-02-01",
+            "name": "[variables('appServicePlanId')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "F1",
+                "tier": "Free"
+            },
+            "properties": {
+                "name": "[variables('appServicePlanName')]"
+            }
+        }
+    ],
+    "variables": {
+        "appServicePlanName": "[concat('appServicePlan-', uniqueString(resourceGroup().id))]",
+        "appServicePlanId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
+    }
+}

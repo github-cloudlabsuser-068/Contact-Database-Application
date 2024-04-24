@@ -1,0 +1,16 @@
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appName": {
+            "type": "string",
+            "metadata": {
+                "description": "Contact-Database-Application"
+            }
+        },
+        "githubRepoUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "https://github.com/github-cloudlabsuser-068/Contact-Database-Application.git"
+            }
+        }
+    }
